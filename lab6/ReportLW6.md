@@ -28,7 +28,8 @@
 
 Первичная проверка нуля:
 
-![image](https://github.com/Ekaterina108B/ForLabs/assets/144663808/f412b336-a92c-4cd5-a993-de027e4f0a00)
+![image](https://github.com/Ekaterina108B/ForLabs/assets/144663808/6e9933d2-9569-4a3d-8808-48b260cae439)
+
 
 Пример подпрограммы копирования цифры:
 
