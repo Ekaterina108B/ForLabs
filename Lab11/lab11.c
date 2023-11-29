@@ -45,8 +45,7 @@ int main(void){
 	unsigned int number = 0, sum_number = 0;
 	int if_number = 0;
 	kState state = NUMBER_CHECK;
-	while ((ch = getchar()) != EOF)
-	{
+	while ((ch = getchar()) != EOF){
 		switch (state)
 		{
 			case FIND:
@@ -75,7 +74,7 @@ int main(void){
 			break;
 		}
 	}
-			
-	printf("%X\n", sum_number);
+	sum_number += number;	
+	printf("\n%X\n", sum_number);
     return 0;
 }
