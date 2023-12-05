@@ -40,6 +40,7 @@ int main(void){
                 printf("%d ", matrix[line + circle][column + circle]);
                 line++;
             }
+	printf("\n");
         }
     
     return 0;
