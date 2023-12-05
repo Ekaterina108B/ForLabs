@@ -37,48 +37,131 @@
 - создаём матрицу введённого порядка и с помощью вложенных циклов заполняем её
 - внешний цикл `for` пробегает по кол-ву кругов обхода; внутренние циклы `while` созданы для прохождения по
 "границам" матрицы
-- проверяем порядок матрицы: если он нечётный, то выводим центральный элемент, который не вывелся в силу
-особенности программы 
 
 Тест №1. Порядок 0.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+0
+Matrix of order 0
 ```
 
 Тест №2. Порядок 1.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+1
+1
+1
 ```
 
 Тест №3. Порядок 2.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+2
+1 2
+4 3
+1 2 3 4
 ```
 
 Тест №4. Порядок 3.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+3
+3 4 5
+2 1 6
+9 8 7
+1 2 3 4 5 6 7 8 9
 ```
 
 Тест №5. Порядок 6.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+6
+21 22 23 24 25 26 
+20 7 8 9 10 27
+19 6 1 2 11 28
+18 5 4 3 12 29
+17 16 15 14 13 30
+36 35 34 33 32 31
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
 ```
 
 Тест №6. Порядок 7.
 ```
-
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+7
+31 32 33 34 35 36 37
+30 13 14 15 16 17 38
+29 12 3 4 5 18 39
+28 11 2 1 6 19 40
+27 10 9 8 7 20 41
+26 25 24 23 22 21 42
+49 48 47 46 45 44 43
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49
 ```
 
 6. **Протокол**:
 
 Программа:
 ```
+#include <stdio.h>
+
+int main(void){
+    int order = 0;
+    scanf("%d", &order);
+    int matrix[order][order];
+    int line = 0, column = 0;
+    
+    if(order == 0){
+        printf("Matrix of order 0\n");
+    }
+    else if(order == 1){
+        scanf("%d", &matrix[0][0]);
+        printf("%d\n", matrix[0][0]);
+    }
+    else{
+        for(int i = 0; i < order; i++){
+            for (int j = 0; j < order; j++){
+                scanf("%d", &matrix[i][j]);
+            }
+        }
+        
+        for(int circle = (order + 1)/2 - 1; circle >= 0; circle--){
+                while(line != 0){
+                    printf("%d ", matrix[line + circle][column + circle]);
+                    line--;
+                }
+                while(column + circle*2 != order - 1){
+                    printf("%d ", matrix[line + circle][column + circle]);
+                    column++;
+                }
+                while(line + circle*2 != order - 1){
+                    printf("%d ", matrix[line + circle][column + circle]);
+                    line++;
+                }
+                while(column != 0){
+                    printf("%d ", matrix[line + circle][column + circle]);
+                    column--;
+                }
+                printf("%d ", matrix[line + circle][column + circle]);
+                line++;
+            }
+            printf("\n");
+        }
+    
+    return 0;
+}
 
 ```
 
 Запуск варианта:
 ```
+moscow@moscow:~/Рабочий стол/For Labs/ForLabs/Lab14$ ./a.out
+4
+7 8 9 10
+6 1 2 11
+5 4 3 12
+16 15 14 13
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
 ```
 7. **Замечания автора** по существу работы: -.
 8. **Выводы**: Во время выполнения лабораторной работы ближе ознакомилась с работой с матрицами,
