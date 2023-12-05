@@ -1,9 +1,10 @@
 #include <stdio.h>
 
 int main(void){
-    int order = 0, line = 0, column = 0;
+    int order = 0;
     scanf("%d", &order);
     int matrix[order][order];
+    int line = 0, column = 0;
     
     if(order == 0){
         printf("Matrix of order 0\n");
@@ -19,7 +20,11 @@ int main(void){
             }
         }
         
-        for(int circle = 0; circle <= (order + 1)/2 - 1; circle++){
+        for(int circle = (order + 1)/2 - 1; circle >= 0; circle--){
+                while(line != 0){
+                    printf("%d ", matrix[line + circle][column + circle]);
+                    line--;
+                }
                 while(column + circle*2 != order - 1){
                     printf("%d ", matrix[line + circle][column + circle]);
                     column++;
@@ -32,13 +37,8 @@ int main(void){
                     printf("%d ", matrix[line + circle][column + circle]);
                     column--;
                 }
-                while(line != 0){
-                    printf("%d ", matrix[line + circle][column + circle]);
-                    line--;
-                }
-            }
-            if(order%2==1){
-                printf("%d", matrix[order/2][order/2]);
+                printf("%d ", matrix[line + circle][column + circle]);
+                line++;
             }
         }
     
