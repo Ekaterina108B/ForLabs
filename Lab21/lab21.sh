@@ -47,6 +47,9 @@ confirmation(){
         echo "Вы не указали директорию. По умолчанию взята текущая."
         directory=$(pwd)
     fi
+    if [ "$directory" == "?" ]; then
+        specification
+    fi
     REGEX="^[0-9]+$"
     if [ -z "$min_size" ] || [[ ! $min_size =~ $REGEX ]]; then
         echo "Вы не указали минимальный размер файла. По умолчанию взят 1 байт."
