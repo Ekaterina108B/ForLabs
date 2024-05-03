@@ -162,43 +162,30 @@ void Destroy(List* l){
     free(l);
 }
 
-void DeleteRange(List* l, Iterator* start, Iterator* stop){
-    Iterator* i = (Iterator*)malloc(sizeof(Iterator));
-    i->node = start->node;
-    Next(start);
-    StoreLinkNext(i, stop->node->next);
-    Iterator* s = LastInList(l);
-    if (Equal(s, stop)){
-        l->tail = i->node;
+bool DeleteRange(List* l, const unsigned int start, const unsigned int stop){
+    Iterator* res = FirstInList(l);
+    while(res->node != NULL && Fetch(res) <= stop && start <= Fetch(res)){
+        Next(res);
+        DeleteST(l);
     }
-    free(i);
-    while(NotEqual(start, stop)){
-	Iterator* i = (Iterator*)malloc(sizeof(Iterator));
-	i->node = start->node;
-	Next(start);
-        free(i->node);
-        free(i);
-        l->size--;
+    if (res->node == NULL){
+        free(res);
+        return false;
     }
-    free(stop->node);
-    free(s);
-    l->size--;
-}
-
-void DeleteRangeST(List* l, Iterator* stop){
-    Iterator* start = FirstInList(l);
-    l->head = stop->node->next;
-    while(NotEqual(start, stop)){
-	Iterator* i = (Iterator*)malloc(sizeof(Iterator));
-	i->node = start->node;
-        Next(start);
-        free(i->node);
-        free(i);
-        l->size--;
+    Iterator* d = FirstInList(l);
+    Next(res);
+    while(res->node != NULL){
+        if (Fetch(res) <= stop && start <= Fetch(res)){
+            Next(res);
+            Delete(l, d);
+        } else {
+            Next(res);
+            Next(d);
+        }
     }
-    free(start->node);
-    free(start);
-    l->size--;
+    free(res);
+    free(d);
+    return true;
 }
 
 Iterator* Search(List* l, const unsigned int t){

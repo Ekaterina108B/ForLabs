@@ -25,8 +25,7 @@ void PushInListFirst(List* l, const unsigned int t);
 void PopInList(List* l);
 void Print(List* l);
 void Destroy(List* l);
-void DeleteRange(List* l, Iterator* start, Iterator* stop);
-void DeleteRangeST(List* l, Iterator* stop);
+bool DeleteRange(List* l, const unsigned int start, const unsigned int stop);
 Iterator* Search(List* l, const unsigned int t);
 Iterator* SearchOneLast(List* l, const unsigned int t);
 

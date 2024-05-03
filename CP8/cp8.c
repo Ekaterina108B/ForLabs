@@ -46,7 +46,7 @@ int main(void){
                 unsigned int val;
                 int i = 0;
                 char elem[100];
-                printf("Введите элементы дека №%d: ", count_list+1);
+                printf("Введите элементы листа №%d: ", count_list+1);
                 scanf(" %[^\n]", elem);
                 while ((val = GetNumber(elem, &i)) != -1){
                     PushInList(stor[count_list], val);
@@ -251,45 +251,16 @@ int main(void){
                 scanf("%u", &start);
                 printf("Введите значение конца диапазона: ");
                 scanf("%u", &stop);
-                Iterator* start_i = SearchOneLast(stor[index-1], start);
-                Iterator* stop_i = Search(stor[index-1], stop);
-                if (start_i->node != NULL && stop_i->node != NULL){
-                    DeleteRange(stor[index-1], start_i, stop_i);
-                } else {
-                    Iterator* start_i2 = Search(stor[index-1], start);
-                    Iterator* f = FirstInList(stor[index-1]);
-                    Iterator* s = LastInList(stor[index-1]);
-                    if (Equal(start_i2, f) && Equal(stop_i, s)){
-                        Destroy(stor[index-1]);
-                        for(int i=index-1; i < count_list-1; i++){
-                            stor[i] = stor[i+1];
-                        }
-                        stor[count_list-1] = 0;
-                        count_list--;
-                        printf("Лист удалён!\n");
-                        free(start_i);
-                        free(stop_i);
-                        free(f);
-                        free(s);
-                        free(start_i2);
-                        break;
-                    } else if (Equal(start_i2, f)){
-                        DeleteRangeST(stor[index-1], stop_i);
-                    } else {
-                        printf("Ошибка ввода.\n");
-                        free(start_i2);
-                        free(start_i);
-                        free(stop_i);
-                        free(f);
-                        free(s);
-                        break;
+                if (!DeleteRange(stor[index-1], start, stop)){
+                    free(stor[index-1]);
+                    for(int i=index-1; i < count_list-1; i++){
+                        stor[i] = stor[i+1];
                     }
-                    free(f);
-                    free(s);
-                    free(start_i2);
+                    stor[count_list-1] = 0;
+                    count_list--;
+                    printf("Лист удалён!\n");
+                    break;
                 }
-                free(start_i);
-                free(stop_i);
                 Print(stor[index-1]);
                 printf("Удалено!\n");
             }
