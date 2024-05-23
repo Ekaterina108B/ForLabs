@@ -147,8 +147,8 @@ semi_stack* reverse_polish_notation(char* exp){
     	            semi_tree->stack[semi_tree->size][0] = '+';
     	            semi_tree->size++;
     	        } else if (exp[i] == '-'){
-    	            char m[] = {'~', '^', '*', '/', '+'};
-    	            saw(con, semi_tree, m, 5);
+    	            char m[] = {'~', '^', '*', '/', '+', '-'};
+    	            saw(con, semi_tree, m, 6);
     	            semi_tree->stack[semi_tree->size][0] = '-';
     	            semi_tree->size++;
     	        } else if (exp[i] == '('){
@@ -563,6 +563,7 @@ void math_expression(semi_stack* s, char* exp){
     }
     free(p);
     free(le);
+    free(s);
 }
 
 char* clear_space(char* exp, char* neww){
@@ -570,7 +571,7 @@ char* clear_space(char* exp, char* neww){
     int i = 0;
     int j = 0;
     while (exp[j] != '\0'){
-    	if (exp[j] != ' '){
+    	if (exp[j] != ' ' && exp[j] != '\n'){
     	    neww[i] = exp[j];
     	    i++;
     	}

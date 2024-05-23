@@ -44,7 +44,7 @@ void factorization(H* h, int num){
     	    num /= div;
     	} else {
     	    div++;
-    	    if (h->massiv[h->size] != 0) { h->size++; }
+    	    if (h->massiv[h->size]->count != 0) { h->size++; }
     	}
     }
     h->size++;
@@ -55,13 +55,6 @@ void variant(Tree* t, Leaf* l){
     H* left = Kraft_H(t, l->left);
     H* res = NOD(right, left);
     H* res2 = Copy_H(res);
-    for (int i=0; i<res->size; i++){
-    	printf("[%d, %c, count = %d], ", res->massiv[i]->data, res->massiv[i]->var, res->massiv[i]->count);
-    }
-    printf("\n");
-    for (int i=0; i<res2->size; i++){
-    	printf("[%d, %c, count = %d], ", res2->massiv[i]->data, res2->massiv[i]->var, res2->massiv[i]->count);
-    }
     printf("\n");
     cut(t, l->left, res);
     cut(t, l->right, res2);
@@ -91,14 +84,7 @@ H* Kraft_H(Tree* t, Leaf* l){
     	    	bracketing(t, l, h2, 0, l->left->data_int);
     	    	Delete_H(h2);
     	    }
-    	    for (int i=0; i<h->size; i++){
-    		printf("[%d, %c, count = %d]: ", h->massiv[i]->data, h->massiv[i]->var, h->massiv[i]->count);
-    	    }
-    	    printf("%d %c", l->left->data_int, l->left->data_char); 
     	    for (int i=0; i<h->size; i++){ h->massiv[i]->count *= rep; }
-    	    for (int i=0; i<h->size; i++){
-    		printf("[%d, %c, count = %d]: ", h->massiv[i]->data, h->massiv[i]->var, h->massiv[i]->count);
-    	    }
     	    printf("\n");
     	    return h;
     	} else if (l->data_char == '*'){
@@ -169,6 +155,7 @@ H* NOD(H* le, H* ri){
     	    h->size++;
     	}
     }
+    if (h->massiv[0]->data == 0 && h->massiv[0]->var == '\0') { h->size = 0; }
     Delete_H(le);
     Delete_H(ri);
     return h;

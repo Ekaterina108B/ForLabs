@@ -22,9 +22,11 @@ void SplittingOper(Tree* tree, Leaf* leaf, semi_stack* exp, Index* in){
     int i = GetIndex(in);
     if ((exp->stack[i][0] == '-' && is_digit(exp->stack[i][1])) || is_digit(exp->stack[i][0])){
         leaf->data_int = char_into_int(exp->stack[i]);
+        return;
     } else if (exp->stack[i][0] == '-' && exp->stack[i][1] != '\0'){
     	leaf->data_char = exp->stack[i][1];
     	leaf->minus = true;
+    	return;
     } else {
     	leaf->data_char = exp->stack[i][0];
     	if (is_oper(exp->stack[i][0])){
@@ -117,9 +119,17 @@ int clean_up(Tree* t, Leaf* l){
     	    } else {
     	    	copy(l, l->right);
     	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->right->data_char == '\0'){
     	    if (l->right->data_int%l->left->data_int == 0){
@@ -132,9 +142,17 @@ int clean_up(Tree* t, Leaf* l){
     	    	} else {
     	    	    copy(l, l->right);
     	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
     	    	    free(l->right);
     	    	    l->left = NULL;
     	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    	}
     	    }
     	} else if (l->left->data_int == 1 || l->left->data_int == -1){
@@ -164,10 +182,18 @@ int clean_up(Tree* t, Leaf* l){
     	    	    relocate(l, true, l->older);
     	    	} else {
     	    	    copy(l, l->right);
-    	    	    DeleteLeaf(l->left);
-    	    	    DeleteLeaf(l->right);
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
     	    	    l->left = NULL;
     	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    	}
     	    }
     	}
@@ -184,19 +210,35 @@ int clean_up(Tree* t, Leaf* l){
     	    if (l->father != NULL){ relocate(l, false, l->older); }
     	    else {
     	    	copy(l, l->left);
-    	    	free(l->left);
     	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	if (!l->left->is_oper){
+    	    	    free(l->left);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->right = l->right->right;
+    	    	    l->right->father = l;
+    	    	    l->left = l->left->left;
+    	    	    free(l->left->father);
+    	    	    l->left->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_int == 1){
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	    	copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->right->data_char == '\0'){
     	    l->is_oper = false;
@@ -212,19 +254,35 @@ int clean_up(Tree* t, Leaf* l){
     	    if (l->father != NULL){ relocate(l, false, l->older); }
     	    else {
     	    	copy(l, l->left);
-    	    	free(l->left);
     	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	if (!l->left->is_oper){
+    	    	    free(l->left);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->right = l->right->right;
+    	    	    l->right->father = l;
+    	    	    l->left = l->left->left;
+    	    	    free(l->left->father);
+    	    	    l->left->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->left->data_int == 0){
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	    	copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->right->data_char == '\0'){
     	    l->is_oper = false;
@@ -243,19 +301,35 @@ int clean_up(Tree* t, Leaf* l){
     	    if (l->father != NULL){ relocate(l, false, l->older);}
     	    else {
     	    	copy(l, l->left);
-    	    	free(l->left);
     	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	if (!l->left->is_oper){
+    	    	    free(l->left);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->right = l->right->right;
+    	    	    l->right->father = l;
+    	    	    l->left = l->left->left;
+    	    	    free(l->left->father);
+    	    	    l->left->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->left->data_int == 0){
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	    	copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->left->data_char == '\0' && l->right->data_char == '\0'){
     	    l->is_oper = false;
@@ -304,10 +378,18 @@ int clean_up(Tree* t, Leaf* l){
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	        copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->right->data_char == '\0' && l->right->data_int == 0){
     	    l->is_oper = false;
@@ -321,20 +403,36 @@ int clean_up(Tree* t, Leaf* l){
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	        copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->right->data_char == '\0' && l->right->data_int == -1){
     	    if (l->left->data_int%2==0) { l->right->data_int = 1; }
     	    if (l->father != NULL){ relocate(l, true, l->older); }
     	    else {
     	        copy(l, l->right);
-    	    	free(l->left);
-    	    	free(l->right);
-    	    	l->left = NULL;
-    	    	l->right = NULL;
+    	    	    free(l->left);
+    	    	    if (!l->right->is_oper){
+    	    	    free(l->right);
+    	    	    l->left = NULL;
+    	    	    l->right = NULL;
+    	    	} else {
+    	    	    l->left = l->right->left;
+    	    	    l->left->father = l;
+    	    	    l->right = l->right->right;
+    	    	    free(l->right->father);
+    	    	    l->right->father = l; 
+    	    	}
     	    }
     	} else if (l->right->data_char == '\0' && l->left->data_int > 0){
     	    l->is_oper = false;
@@ -397,21 +495,21 @@ int clean_up(Tree* t, Leaf* l){
     	}
     } else if (l->data_char == '~') {
     	if (l->left->data_char == '\0' && l->left->data_int == 0){
+    	    l->is_oper = false;
     	    l->data_char = '\0';
     	    l->data_int = 0;
     	    DeleteLeaf(l->left);
     	    l->right = NULL;
     	    l->left = NULL;
     	} else if (l->left->data_char == '\0'){
+    	    l->is_oper = false;
     	    l->data_char = '\0';
-    	    l->data_int = -(l->data_int);
+    	    l->data_int = -(l->left->data_int);
     	    DeleteLeaf(l->left);
     	    l->right = NULL;
     	    l->left = NULL;
     	}
     }
-    PrintTree(t->root, 0);
-    printf("-----------------------------------\n");
     return error;
 }
 
@@ -442,7 +540,7 @@ void relocate(Leaf* e, bool x, bool y){
 }
 
 void copy(Leaf* l, Leaf* x){
-    l->is_oper = false;
+    l->is_oper = x->is_oper;
     l->data_char = x->data_char;
     l->data_int = x->data_int;
     l->minus = x->minus;
